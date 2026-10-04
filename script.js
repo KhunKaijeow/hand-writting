@@ -1,5 +1,6 @@
 var vid = document.getElementById("vid");
 var c = document.getElementById("c");
+var clearButton = document.getElementById("clear");
 var ctx = c.getContext("2d");
 var arr = [];
 var cur = [];
@@ -8,10 +9,21 @@ var draw = false;
 var sx = null;
 var sy = null;
 
+function clearCanvas() {
+  arr = [];
+  cur = [];
+  draw = false;
+  sx = null;
+  sy = null;
+  ctx.clearRect(0, 0, c.width, c.height);
+}
+
 window.onkeydown = function (e) {
   if (e.key == "Shift") shift = true;
-  if (e.code == "Space") arr = [];
+  if (e.code == "Space") clearCanvas();
 };
+
+clearButton.onclick = clearCanvas;
 
 window.onkeyup = function (e) {
   if (e.key == "Shift") shift = false;

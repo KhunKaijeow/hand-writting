@@ -9,11 +9,14 @@
     body { margin: 0; background: #050301; overflow: hidden; }
     video { display: none; }
     canvas { width: 100%; height: 100%; transform: scaleX(-1); position: absolute; z-index: 1; }
+    #clear { position: fixed; top: 20px; right: 20px; z-index: 2; padding: 10px 16px; border: 1px solid #FFC5D3; border-radius: 999px; background: rgba(5, 3, 1, 0.75); color: #FFC5D3; cursor: pointer; font: 600 14px/1 sans-serif; letter-spacing: 0.04em; }
+    #clear:hover, #clear:focus-visible { background: #FFC5D3; color: #050301; }
   </style>
 </head>
 <body>
   <video id="vid"></video>
   <canvas id="c"></canvas>
+  <button id="clear" type="button">Clear Canvas</button>
   <script src="script.js"></script>
 </body>
 </html>
