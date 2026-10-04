@@ -6,6 +6,7 @@ const vm = require("node:vm");
 
 function loadScript() {
   const clearCalls = [];
+  const documentElement = { dataset: {} };
   const context2d = {
     clearRect(...args) {
       clearCalls.push(args);
@@ -19,6 +20,9 @@ function loadScript() {
     },
   };
   const clearButton = {};
+  const themeToggle = {
+    setAttribute() {},
+  };
   const sandbox = {
     Camera: function Camera() {},
     Hands: function Hands() {},
@@ -26,9 +30,11 @@ function loadScript() {
     drawConnectors() {},
     drawLandmarks() {},
     document: {
+      documentElement,
       getElementById(id) {
         if (id === "c") return canvas;
         if (id === "clear") return clearButton;
+        if (id === "theme-toggle") return themeToggle;
         return {};
       },
     },

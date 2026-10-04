@@ -9,12 +9,14 @@ Draw with your index finger using a webcam, powered by MediaPipe Hands for real-
 3. Raise your index finger in front of the camera
 4. **Hold Shift** to draw
 5. **Press Space** to clear the canvas
+6. Use **Switch to light mode** or **Switch to dark mode** to change the theme. The app starts in dark mode.
 
 ## How It Works
 
 - Uses **MediaPipe Hands** to detect hand landmarks via webcam
 - Tracks the index fingertip (landmark #8) with smoothing for fluid strokes
-- Draws in pink (#FFC5D3) with a glow effect on a dark background
+- Draws with a glowing theme-aware ink color over a theme-aware webcam overlay
+- Supports accessible Light/Dark theme switching while preserving the drawing canvas and webcam behavior
 
 ## Dependencies
 
