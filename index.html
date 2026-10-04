@@ -1,22 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" data-theme="dark">
 <head>
-  <title>ramadan pen</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ramadan Pen</title>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
   <style>
-    body { margin: 0; background: #050301; overflow: hidden; }
+    :root {
+      color-scheme: dark;
+      --page-background: #050301;
+      --control-background: rgba(5, 3, 1, 0.75);
+      --control-border: #FFC5D3;
+      --control-text: #FFC5D3;
+      --control-hover-background: #FFC5D3;
+      --control-hover-text: #050301;
+      --focus-ring: #FFFFFF;
+    }
+
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --page-background: #FFF8F2;
+      --control-background: rgba(255, 255, 255, 0.86);
+      --control-border: #B4235A;
+      --control-text: #8F1D49;
+      --control-hover-background: #B4235A;
+      --control-hover-text: #FFF8F2;
+      --focus-ring: #7A163B;
+    }
+
+    html, body { width: 100%; height: 100%; }
+    body { margin: 0; background: var(--page-background); overflow: hidden; }
     video { display: none; }
-    canvas { width: 100%; height: 100%; transform: scaleX(-1); position: absolute; z-index: 1; }
-    #clear { position: fixed; top: 20px; right: 20px; z-index: 2; padding: 10px 16px; border: 1px solid #FFC5D3; border-radius: 999px; background: rgba(5, 3, 1, 0.75); color: #FFC5D3; cursor: pointer; font: 600 14px/1 sans-serif; letter-spacing: 0.04em; }
-    #clear:hover, #clear:focus-visible { background: #FFC5D3; color: #050301; }
+    canvas { width: 100%; height: 100%; transform: scaleX(-1); position: absolute; inset: 0; z-index: 1; }
+    .controls { position: fixed; top: 20px; right: 20px; z-index: 2; display: flex; flex-direction: row; gap: 10px; }
+    .control-button { padding: 10px 16px; border: 1px solid var(--control-border); border-radius: 999px; background: var(--control-background); color: var(--control-text); cursor: pointer; font: 600 14px/1 sans-serif; letter-spacing: 0.04em; white-space: nowrap; }
+    .control-button:hover { background: var(--control-hover-background); color: var(--control-hover-text); }
+    .control-button:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
+
+    @media (max-width: 600px) {
+      .controls {
+        top: max(12px, env(safe-area-inset-top));
+        right: max(12px, env(safe-area-inset-right));
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+      }
+
+      .control-button {
+        min-height: 44px;
+        padding: 8px 14px;
+      }
+    }
+
+    @media (orientation: landscape) and (max-height: 500px) {
+      .controls {
+        top: max(8px, env(safe-area-inset-top));
+        right: max(8px, env(safe-area-inset-right));
+        gap: 6px;
+      }
+
+      .control-button {
+        min-height: 44px;
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+    }
   </style>
 </head>
 <body>
   <video id="vid"></video>
   <canvas id="c"></canvas>
-  <button id="clear" type="button">Clear Canvas</button>
+  <div class="controls">
+    <button id="theme-toggle" class="control-button" type="button" aria-label="Switch to light mode" aria-pressed="false">Switch to light mode</button>
+    <button id="clear" class="control-button" type="button">Clear Canvas</button>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>

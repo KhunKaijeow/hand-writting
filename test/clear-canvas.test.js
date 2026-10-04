@@ -6,6 +6,7 @@ const vm = require("node:vm");
 
 function loadScript() {
   const clearCalls = [];
+  const documentElement = { dataset: {} };
   const context2d = {
     clearRect(...args) {
       clearCalls.push(args);
@@ -19,6 +20,10 @@ function loadScript() {
     },
   };
   const clearButton = {};
+  const themeToggle = {
+    tagName: "BUTTON",
+    setAttribute() {},
+  };
   const sandbox = {
     Camera: function Camera() {},
     Hands: function Hands() {},
@@ -26,9 +31,11 @@ function loadScript() {
     drawConnectors() {},
     drawLandmarks() {},
     document: {
+      documentElement,
       getElementById(id) {
         if (id === "c") return canvas;
         if (id === "clear") return clearButton;
+        if (id === "theme-toggle") return themeToggle;
         return {};
       },
     },
@@ -46,7 +53,7 @@ function loadScript() {
     sandbox,
     { filename: "script.js" },
   );
-  return { canvas, clearButton, clearCalls, sandbox };
+  return { canvas, clearButton, clearCalls, sandbox, themeToggle };
 }
 
 function seedDrawingState(sandbox) {
@@ -96,4 +103,20 @@ test("Clear Canvas button uses the canvas reset behavior", () => {
   assert.equal(sandbox.draw, false);
   assert.equal(sandbox.sx, null);
   assert.equal(sandbox.sy, null);
+});
+
+test("Space on the theme button preserves the drawing and toggles the theme", () => {
+  const { clearCalls, themeToggle, sandbox } = loadScript();
+  seedDrawingState(sandbox);
+
+  sandbox.window.onkeydown({ code: "Space", target: themeToggle });
+  themeToggle.onclick();
+
+  assert.equal(sandbox.theme, "light");
+  assert.equal(sandbox.arr.length, 1);
+  assert.equal(sandbox.cur.length, 1);
+  assert.equal(sandbox.draw, true);
+  assert.equal(sandbox.sx, 60);
+  assert.equal(sandbox.sy, 72);
+  assert.equal(clearCalls.length, 0);
 });
