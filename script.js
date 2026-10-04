@@ -53,9 +53,41 @@ function clearCanvas() {
   ctx.clearRect(0, 0, c.width, c.height);
 }
 
+var interactiveTargetSelector = [
+  "a",
+  "button",
+  "input",
+  "select",
+  "textarea",
+  "option",
+  "summary",
+  "[contenteditable]:not([contenteditable='false'])",
+  "[tabindex]",
+  "[role='button']",
+  "[role='link']",
+  "[role='checkbox']",
+  "[role='radio']",
+  "[role='switch']",
+  "[role='tab']",
+  "[role='textbox']",
+  "[role='combobox']",
+  "[role='listbox']",
+  "[role='menuitem']",
+].join(", ");
+
+function isInteractiveTarget(target) {
+  if (!target) return false;
+  if (target.isContentEditable) return true;
+  if (typeof target.matches == "function" && target.matches(interactiveTargetSelector)) return true;
+  if (typeof target.closest == "function" && target.closest(interactiveTargetSelector)) return true;
+
+  var tagName = String(target.tagName || "").toLowerCase();
+  return ["a", "button", "input", "select", "textarea", "option", "summary"].indexOf(tagName) != -1;
+}
+
 window.onkeydown = function (e) {
   if (e.key == "Shift") shift = true;
-  if (e.code == "Space") clearCanvas();
+  if (e.code == "Space" && !isInteractiveTarget(e.target)) clearCanvas();
 };
 
 clearButton.onclick = clearCanvas;
